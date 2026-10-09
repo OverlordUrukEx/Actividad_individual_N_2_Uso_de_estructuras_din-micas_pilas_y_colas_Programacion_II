@@ -1,51 +1,35 @@
-class _Nodo:
-    __slots__ = ("dato", "siguiente")
-
-    def __init__(self, dato):
-        self.dato = dato
-        self.siguiente = None
+from collections import deque
 
 
 class Cola:
-    """Cola (FIFO) implementada con nodos."""
+    """Cola (FIFO) implementada sobre collections.deque.
+
+    Se usa cuando los elementos deben procesarse en el mismo orden en que
+    ingresan: se encola al final (``encolar``) y se desencola por el frente
+    (``desencolar``). Aquí gestiona la agenda diaria y las urgencias por fecha.
+    """
 
     def __init__(self):
-        self._frente = None
-        self._final = None
-        self._tamano = 0
+        self._datos: deque = deque()
 
     def encolar(self, dato) -> None:
-        nodo = _Nodo(dato)
-        if self.esta_vacia():
-            self._frente = nodo
-        else:
-            self._final.siguiente = nodo
-        self._final = nodo
-        self._tamano += 1
+        self._datos.append(dato)
 
     def desencolar(self):
         if self.esta_vacia():
             raise IndexError("La cola está vacía")
-        dato = self._frente.dato
-        self._frente = self._frente.siguiente
-        if self._frente is None:
-            self._final = None
-        self._tamano -= 1
-        return dato
+        return self._datos.popleft()
 
     def ver_frente(self):
         if self.esta_vacia():
             raise IndexError("La cola está vacía")
-        return self._frente.dato
+        return self._datos[0]
 
     def esta_vacia(self) -> bool:
-        return self._frente is None
+        return not self._datos
 
     def __len__(self) -> int:
-        return self._tamano
+        return len(self._datos)
 
     def __iter__(self):
-        actual = self._frente
-        while actual:
-            yield actual.dato
-            actual = actual.siguiente
+        return iter(self._datos)

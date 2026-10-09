@@ -13,6 +13,7 @@ class Cita:
     prioridad: str
     fecha: date
     cantidad: int = 1
+    atendida: bool = False
 
     def __str__(self) -> str:
         return (
