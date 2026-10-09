@@ -63,6 +63,33 @@ def validar_fecha(texto: str) -> date:
         raise ValueError("Fecha inválida. Use formato DD/MM/AAAA.")
 
 
+def _validar_fecha_no_pasada(texto: str) -> date:
+    """Formato DD/MM/AAAA y nunca anterior a hoy (compartido por cita y agenda)."""
+    fecha = validar_fecha(texto)
+    hoy = date.today()
+    if fecha < hoy:
+        raise ValueError(
+            f"La fecha no puede ser anterior a hoy ({hoy.strftime(FORMATO_FECHA)})."
+        )
+    return fecha
+
+
+def validar_fecha_cita(texto: str) -> date:
+    """Fecha al registrar una cita: hoy o futura.
+
+    Aplica a toda cita, en especial a las urgencias de Extracción, que no
+    pueden quedar con fecha vencida en la agenda."""
+    return _validar_fecha_no_pasada(texto)
+
+
+def validar_fecha_agenda(texto: str) -> date:
+    """Fecha para generar la agenda del día: hoy o futura.
+
+    La agenda solo muestra citas del día actual o próximas; ver fechas
+    anteriores sería un informe histórico, no contemplado en este proyecto."""
+    return _validar_fecha_no_pasada(texto)
+
+
 def validar_cantidad(texto: str) -> int:
     if not texto.isdigit() or not (1 <= int(texto) <= 32):
         raise ValueError("Cantidad inválida: entero entre 1 y 32.")
@@ -100,8 +127,12 @@ def pedir_prioridad() -> str:
     return _pedir_hasta_valido("Prioridad: ", validar_prioridad)
 
 
-def pedir_fecha() -> date:
-    return _pedir_hasta_valido("Fecha (DD/MM/AAAA): ", validar_fecha)
+def pedir_fecha_cita() -> date:
+    return _pedir_hasta_valido("Fecha de la cita (DD/MM/AAAA): ", validar_fecha_cita)
+
+
+def pedir_fecha_agenda() -> date:
+    return _pedir_hasta_valido("Fecha de la agenda (DD/MM/AAAA): ", validar_fecha_agenda)
 
 
 def pedir_cantidad() -> int:

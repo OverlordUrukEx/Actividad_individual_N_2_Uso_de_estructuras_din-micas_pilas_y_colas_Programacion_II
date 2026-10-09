@@ -9,7 +9,7 @@ def _capturar_cita() -> Cita:
     cedula = v.pedir_cedula()
     tipo = v.pedir_tipo()
     prioridad = v.pedir_prioridad()
-    fecha = v.pedir_fecha()
+    fecha = v.pedir_fecha_cita()
     # Regla de negocio (heredada de la Actividad N.° 1):
     # Limpieza y Diagnóstico siempre atienden una sola unidad.
     cantidad = 1 if tipo in ("Limpieza", "Diagnóstico") else v.pedir_cantidad()
@@ -45,7 +45,7 @@ def menu() -> None:
                     print(f"  {i}. {c}")
         elif opcion == 3:
             print("Generar agenda para el día:")
-            dia = v.pedir_fecha()
+            dia = v.pedir_fecha_agenda()
             cola = engine.construir_cola_del_dia(dia)
             if cola.esta_vacia():
                 print("No hay citas ese día.")
@@ -55,7 +55,7 @@ def menu() -> None:
                     print(f"  {i}. {c}")
                 _atender_cola(cola, engine)
         elif opcion == 4:
-            dia = v.pedir_fecha()
+            dia = v.pedir_fecha_agenda()
             cola = engine.construir_cola_del_dia(dia)
             _atender_cola(cola, engine)
         elif opcion == 5:

@@ -44,7 +44,7 @@ Se implementa con `collections.deque` porque permite insertar y extraer en ambos
 - Nombre: mínimo 3 letras, sin números ni símbolos.
 - **Cédula: solo dígitos, 7 a 10 caracteres** (no se permiten letras).
 - Tipo de atención y prioridad: valores del dominio (tolerantes a tildes y mayúsculas).
-- Fecha: formato DD/MM/AAAA.
+- Fecha: formato DD/MM/AAAA; **nunca anterior a hoy** al registrar una cita y al generar/atender la agenda (solo día actual o futuros; ver fechas anteriores sería un informe histórico no contemplado).
 - Cantidad: entero 1–32, **forzada a 1 en Limpieza y Diagnóstico**.
 - Opciones de menú dentro de rango; respuestas `s/n`.
 - No duplicar cédula en la misma fecha; control de cola vacía y de citas ya atendidas.
